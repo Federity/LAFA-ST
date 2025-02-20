@@ -15,10 +15,12 @@
 """Parameter conversion."""
 
 from io import BytesIO
-from typing import cast
+from typing import cast, List, OrderedDict
 
 import numpy as np
 from typing import NDArray, NDArrays, Parameters
+import torch
+import torch.nn as nn
 
 def ndarrays_to_parameters(ndarrays: NDArrays) -> Parameters:
     """Convert NumPy ndarrays to parameters object."""
@@ -49,3 +51,13 @@ def bytes_to_ndarray(tensor: bytes) -> NDArray:
     # Source: https://numpy.org/doc/stable/reference/generated/numpy.load.html
     ndarray_deserialized = np.load(bytes_io, allow_pickle=False)
     return cast(NDArray, ndarray_deserialized)
+
+#  get the model parameters as an nd array
+def get_parameters(net: nn.Module) -> List[np.ndarray]:
+    return [val.cpu().numpy() for _, val in net.state_dict().items()]
+
+# set the parameters given an nd array
+def set_parameters(net, parameters: List[np.ndarray]):
+    params_dict = zip(net.state_dict().keys(), parameters)
+    state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
+    net.load_state_dict(state_dict, strict=True)

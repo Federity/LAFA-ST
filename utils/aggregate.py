@@ -3,7 +3,7 @@
 
 from functools import reduce
 import numpy as np
-from typing import NDArrays
+from typings import NDArrays
 
 def aggregate(results: list[tuple[NDArrays, int]]) -> NDArrays:
     """Compute weighted average."""

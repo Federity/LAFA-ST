@@ -1,7 +1,8 @@
 import numpy as np
 from utils.parameter import ndarrays_to_parameters, parameters_to_ndarrays
-from utils.typing import NDArray, NDArrays
+from utils.typings import NDArray, NDArrays
 
+# so the LAFAST server does not need access to the model. It is just the parameter aggregator
 class LAFASTServerNumpy:
     def __init__(self, global_params: NDArrays, alpha: float = 0.9, eta: float = 0.1, epsilon: float = 1e-8):
         """
@@ -13,14 +14,13 @@ class LAFASTServerNumpy:
         """
         self.global_params: NDArrays = global_params
         self.stability: NDArrays = [np.ones_like(param) for param in global_params]
-        self.alpha = alpha
-        self.eta = eta
-        self.epsilon = epsilon
+        self.alpha = alpha          # stability decay rate
+        self.eta = eta              # global learning rate
+        self.epsilon = epsilon      # small non zero constant
 
     def apply_update(self, client_params: NDArrays, client_delta: NDArrays) -> None:
         """
         Apply a client's update to the global parameters.
-
         Args:
             client_params: A list of numpy arrays (one per layer) from the client.
             client_delta: A list of numpy arrays representing the client’s update magnitude.
