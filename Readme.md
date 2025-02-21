@@ -64,7 +64,7 @@ Broadcast commit_v(N+1) (parameters + updated stability scores).
 
 Clear pending buffer of merged updates.
 
-4. Key Properties
+## 4. Key Properties
 a. Version Linearity
 All new client updates must derive from the latest merger commit (v(N+1)).
 
