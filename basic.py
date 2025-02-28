@@ -22,7 +22,7 @@ class LAFASTServer:
                 delta = (client_params[n] - p) / (self.stability[n] + self.epsilon)
                 p.data += self.eta + delta
         
-            # Optional: Add differential privacy noise
+        # Optional: Add differential privacy noise
         for n in self.stability:
             noise_std = 0.01 # noise standard deviation
             self.stability[n] += torch.rand_like(self.stability[n]) * noise_std                    
